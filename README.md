@@ -36,7 +36,9 @@ err：
 {
     status: 0     //数字类型；
 }
+
 示例代码
+
 ```
 var suWebsocket = api.require('suWebsocket');
 suWebsocket.listener(function (ret, err) {
@@ -92,14 +94,18 @@ err：
                     //0（连接失败）
                     //-1（已连接成功,不用重复连接），
 }
+
 示例代码
 
+```
 var suWebsocket = api.require('suWebsocket');
 suWebsocket.open({
     url : "ws://192.168.1.5:8887"
 }, function (ret, err) {
     alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
 });
+```
+
 可用性
 
 Android系统
@@ -135,14 +141,18 @@ err：
     status: 0     //数字类型；0
     message: "发送失败"
 }
+
 示例代码
 
+```
 var suWebsocket = api.require('suWebsocket');
 suWebsocket.send({
     data: '这是客户端发送的数据'
 }, function (ret, err) {
     alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
 });
+```
+
 可用性
 
 Android系统
@@ -172,12 +182,16 @@ err：
     status: 0     //数字类型；关闭失败
     message: "关闭失败"
 }
+
 示例代码
 
+```
 var suWebsocket = api.require('suWebsocket');
 suWebsocket.close(function (ret, err) {
     alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
 });
+```
+
 可用性
 
 Android系统
@@ -203,12 +217,16 @@ ret：
                //CLOSING 正在关闭
                //CLOSED 已关闭
 }
+
 示例代码
 
+```
 var suWebsocket = api.require('suWebsocket');
 suWebsocket.connectState(function (ret, err) {
     alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
 });
+```
+
 可用性
 
 Android系统
