@@ -37,11 +37,13 @@ err：
     status: 0     //数字类型；
 }
 示例代码
-
+```
 var suWebsocket = api.require('suWebsocket');
 suWebsocket.listener(function (ret, err) {
     alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
 })
+```
+
 可用性
 
 Android系统
