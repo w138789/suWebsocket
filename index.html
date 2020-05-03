@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>suWebsocket</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="css/box.css"/>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+        }
+
+        .wrap {
+            margin-top: 20px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-flex-flow: column;
+        }
+
+        header {
+            position: fixed;
+            height: 44px;
+            width: 100%;
+            text-align: center;
+            background-color: #f0ad4e;
+            color: #fff;
+            line-height: 44px;
+            font-size: 20px;
+        }
+
+        .flex-1 {
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+        }
+
+        footer {
+            height: 30px;
+            width: 100%;
+            background-color: #81a9c3;
+            color: white;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        #main {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body class="wrap">
+<header>suWebsocket</header>
+<div id="main">
+    <div class='itemtitle'>1、开启websocket</div>
+    <div class="clickbtn" tapmode="active" onclick="webOpen()">开启websocket</div>
+    <div class='itemtitle'>2、关闭websocket</div>
+    <div class="clickbtn" tapmode="active" onclick="webClose()">关闭websocket</div>
+    <div class='itemtitle'>3、发送内容</div>
+    <div class="clickbtn" tapmode="active" onclick="webSend()">发送内容</div>
+    <div class='itemtitle'>4、listener监听内容</div>
+    <div style="padding: 20px;">
+        <span>返回值：</span>
+        <span id="listener" style="background: #efeff4"></span>
+    </div>
+</div>
+</body>
+<script typet="text/javascript" src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="./script/api.js"></script>
+<script type="text/javascript">
+var suWebsocket = null;
+var bdTTS = null
+apiready = function () {
+    bdTTS = api.require('bdTTS');
+    bdTTS.init({
+        mode: 'MIX'
+    }, function (ret) {
+        // $('#baidu').html(JSON.stringify(ret));
+    });
+    suWebsocket = api.require('suWebsocket');
+
+    //listener监听内容
+    suWebsocket.listener(function (ret, err) {
+        $('#listener').html(JSON.stringify(ret) + "  " + JSON.stringify(err));
+        if (parseInt(ret.status)) {
+            var content = ret.message;
+            bdTTS.speak({
+                text: content
+            }, function (ret) {
+                // console.log(JSON.stringify(ret));
+            });
+        }
+    })
+};
+
+/**
+ * 开启websocket
+ */
+function webOpen () {
+    var param = {
+        url: 'ws://192.168.1.5:56275',
+    };
+    suWebsocket.open(param, function (ret, err) {
+        alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+    });
+}
+
+/**
+ * 关闭websocket
+ */
+function webClose () {
+    suWebsocket.close(function (ret, err) {
+        alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+    });
+}
+
+/**
+ * 发送内容
+ */
+function webSend () {
+    suWebsocket.send({
+        data: '这是客户端发送的数据'
+    }, function (ret, err) {
+        alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+    });
+}
+</script>
+
+</html>
