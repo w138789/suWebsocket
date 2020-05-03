@@ -57,10 +57,15 @@
 <header>suWebsocket</header>
 <div id="main">
     <div class='itemtitle'>1、开启websocket</div>
+    连接地址：<input type="text" style="width: 80%" id='websocketUrl' placeholder='websocketUrl地址'
+                value="ws://192.168.1.5:56275"><br>
+    心跳时间间隔：<input type="text" id='pingTime' placeholder='心跳时间间隔' value="5"><br>
+    心跳内容：<input type="text" id='pingData' placeholder='心跳内容' value="你好"><br>
     <div class="clickbtn" tapmode="active" onclick="webOpen()">开启websocket</div>
     <div class='itemtitle'>2、关闭websocket</div>
     <div class="clickbtn" tapmode="active" onclick="webClose()">关闭websocket</div>
     <div class='itemtitle'>3、发送内容</div>
+    <input type="text" id='sendData' placeholder='发送内容' value="你好"></td>
     <div class="clickbtn" tapmode="active" onclick="webSend()">发送内容</div>
     <div class='itemtitle'>4、listener监听内容</div>
     <div style="padding: 20px;">
@@ -73,27 +78,12 @@
 <script type="text/javascript" src="./script/api.js"></script>
 <script type="text/javascript">
 var suWebsocket = null;
-var bdTTS = null
 apiready = function () {
-    bdTTS = api.require('bdTTS');
-    bdTTS.init({
-        mode: 'MIX'
-    }, function (ret) {
-        // $('#baidu').html(JSON.stringify(ret));
-    });
     suWebsocket = api.require('suWebsocket');
 
     //listener监听内容
     suWebsocket.listener(function (ret, err) {
-        $('#listener').html(JSON.stringify(ret) + "  " + JSON.stringify(err));
-        if (parseInt(ret.status)) {
-            var content = ret.message;
-            bdTTS.speak({
-                text: content
-            }, function (ret) {
-                // console.log(JSON.stringify(ret));
-            });
-        }
+        $('#listener').prepend(JSON.stringify(ret) + "  " + JSON.stringify(err) + "<br>");
     })
 };
 
@@ -101,9 +91,14 @@ apiready = function () {
  * 开启websocket
  */
 function webOpen () {
+    var url = $('#websocketUrl').val() ? $('#websocketUrl').val() : 'ws://192.168.1.5:56275';
+    var pingTime = $('#pingTime').val() ? $('#pingTime').val() : '5';
+    var pingData = $('#pingData').val() ? $('#pingData').val() : '';
     var param = {
-        url: 'ws://192.168.1.5:56275',
+        url: url,
     };
+    if (pingTime != '') param.pingTime = pingTime;
+    if (pingData != '') param.pingData = pingData;
     suWebsocket.open(param, function (ret, err) {
         alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
     });
@@ -123,7 +118,7 @@ function webClose () {
  */
 function webSend () {
     suWebsocket.send({
-        data: '这是客户端发送的数据'
+        data: $('#sendData').val()
     }, function (ret, err) {
         alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
     });
